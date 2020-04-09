@@ -15,6 +15,10 @@ const Counter = () => {
     localStorage.setItem('count', count);
   }, [count]);
 
+  useEffect(() => {
+    document.title = shmee;
+  }, [shmee]);
+
   const increment = () => {
     // We can pass a func to our updating functino, it takes the state
     // var that it's bound to as its first arg, note that it doesn't get props for free
