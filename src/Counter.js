@@ -1,62 +1,37 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-const incrementState = (state) => {
-  return { count: state.count + 1 };
+const Counter = () => {
+  const [count, setCount] = useState(0);
+  const [shmee, setShmee] = useState('andy');
+
+  const increment = () => {
+    // We can pass a func to our updating functino, it takes the state
+    // var that it's bound to as its first arg, note that it doesn't get props for free
+    setCount((fart) => fart + 1);
+  };
+  const decrement = () => {
+    setCount(count - 1);
+  };
+  const reset = () => {
+    setCount(0);
+  };
+
+  const capName = () => {
+    setShmee((oldName) => oldName.toUpperCase());
+  };
+
+  return (
+    <div className="Counter">
+      <p className="count">{count}</p>
+      <p>{shmee}</p>
+      <section className="controls">
+        <button onClick={increment}>Increment</button>
+        <button onClick={decrement}>Decrement</button>
+        <button onClick={reset}>Reset</button>
+        <button onClick={capName}>Cap name</button>
+      </section>
+    </div>
+  );
 };
-
-const decrementState = (state) => {
-  return { count: state.count - 1 };
-};
-
-class Counter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      count: 0,
-    };
-    this.increment = this.increment.bind(this);
-    this.decrement = this.decrement.bind(this);
-    this.reset = this.reset.bind(this);
-    this.updateDocTitle = this.updateDocTitle.bind(this);
-  }
-
-  updateDocTitle() {
-    document.title = this.state.count;
-  }
-
-  increment() {
-    this.setState(incrementState, () => {
-      this.updateDocTitle();
-    });
-  }
-  decrement() {
-    this.setState(decrementState, () => {
-      this.updateDocTitle();
-    });
-  }
-  reset() {
-    this.setState(
-      (state) => {
-        return { count: 0 };
-      },
-      () => {
-        this.updateDocTitle();
-      },
-    );
-  }
-
-  render() {
-    return (
-      <div className="Counter">
-        <p className="count">{this.state.count}</p>
-        <section className="controls">
-          <button onClick={this.increment}>Increment</button>
-          <button onClick={this.decrement}>Decrement</button>
-          <button onClick={this.reset}>Reset</button>
-        </section>
-      </div>
-    );
-  }
-}
 
 export default Counter;
