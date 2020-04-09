@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Counter = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(parseInt(localStorage.getItem('count')));
   const [shmee, setShmee] = useState('andy');
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const Counter = () => {
     console.log('running use effect');
     // second arg is a list of dependencies. If anything in the list changes, run the hook
     // empty list = run on mount
-    document.title = count;
+    localStorage.setItem('count', count);
   }, [count]);
 
   const increment = () => {
