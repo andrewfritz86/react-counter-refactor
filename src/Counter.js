@@ -1,49 +1,44 @@
 import React, { useState, useEffect } from 'react';
 
-const Counter = () => {
-  const [count, setCount] = useState(parseInt(localStorage.getItem('count')));
-  const [shmee, setShmee] = useState('andy');
+// custom hook for reading/writing state to locla storage
+const useLocalStorage = (initialState, key) => {
+  const get = () => {
+    // get the item by the key ie {count: {value: 1}}
+    const storage = localStorage.getItem(key);
+    // return parsed items value or initial state
+    if (storage) return JSON.parse(storage).value;
+    return initialState;
+  };
 
+  const [value, setValue] = useState(get()); // set initial values
+  // hooks for updating on value changes
+  // set item {count: value: 0}
   useEffect(() => {
-    // Use effect is intended to handle any side effects of a render method
-    // If we think of functional components as pure, they should simply take
-    // props or state changes and render them in a a pure way. Anything else that might
-    // need to happen at the same time is a side effect, and should be handled here
-    console.log('running use effect');
-    // second arg is a list of dependencies. If anything in the list changes, run the hook
-    // empty list = run on mount
-    localStorage.setItem('count', count);
-  }, [count]);
+    localStorage.setItem(key, JSON.stringify({ value }));
+  }, [value]);
 
-  useEffect(() => {
-    document.title = shmee;
-  }, [shmee]);
+  return [value, setValue];
+};
+
+const Counter = ({ max, step }) => {
+  const [count, setCount] = useLocalStorage(0, 'count');
 
   const increment = () => {
-    // We can pass a func to our updating functino, it takes the state
-    // var that it's bound to as its first arg, note that it doesn't get props for free
-    setCount((fart) => fart + 1);
-  };
-  const decrement = () => {
-    setCount(count - 1);
-  };
-  const reset = () => {
-    setCount(0);
+    setCount((c) => {
+      return c + 1;
+    });
   };
 
-  const capName = () => {
-    setShmee((oldName) => oldName.toUpperCase());
-  };
+  const decrement = () => setCount(count - 1);
+  const reset = () => setCount(0);
 
   return (
     <div className="Counter">
       <p className="count">{count}</p>
-      <p>{shmee}</p>
       <section className="controls">
         <button onClick={increment}>Increment</button>
         <button onClick={decrement}>Decrement</button>
         <button onClick={reset}>Reset</button>
-        <button onClick={capName}>Cap name</button>
       </section>
     </div>
   );
