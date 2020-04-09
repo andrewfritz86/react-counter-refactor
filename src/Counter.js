@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // custom hook for reading/writing state to locla storage
 const useLocalStorage = (initialState, key) => {
@@ -22,6 +22,12 @@ const useLocalStorage = (initialState, key) => {
 
 const Counter = ({ max, step }) => {
   const [count, setCount] = useLocalStorage(0, 'count');
+  // Create a ref that carries over....
+  const countRef = React.useRef();
+
+  // Set the count ref's current property to be the count
+  console.log(countRef.current); //log here BEFORE we reset it on the render
+  countRef.current = count;
 
   const increment = () => {
     setCount((c) => {
@@ -34,6 +40,7 @@ const Counter = ({ max, step }) => {
 
   return (
     <div className="Counter">
+      <p>Current count {countRef.current}</p>
       <p className="count">{count}</p>
       <section className="controls">
         <button onClick={increment}>Increment</button>
